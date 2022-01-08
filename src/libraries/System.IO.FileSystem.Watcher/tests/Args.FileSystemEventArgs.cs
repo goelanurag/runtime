@@ -5,7 +5,7 @@ using Xunit;
 
 namespace System.IO.Tests
 {
-    public class FileSystemEventArgsTests
+    public class FileSystemEventArgsTests: FileCleanupTestBase
     {
         [Theory]
         [InlineData(WatcherChangeTypes.Changed, "C:", "foo.txt")]
@@ -31,5 +31,17 @@ namespace System.IO.Tests
         {
             Assert.Throws<NullReferenceException>(() => new FileSystemEventArgs((WatcherChangeTypes)0, null, string.Empty));
         }
+
+        [Fact]
+        public void FileSystemEventArgs_fullpath_invalid()
+        {
+            using (var testDirectory = new TempDirectory(GetTestFilePath()))
+            using (var file = new TempFile(Path.Combine(testDirectory.Path, "file")))
+            {
+                var args = new FileSystemEventArgs(WatcherChangeTypes.Changed, testDirectory.RelativePath, Path.GetFileName(file.Path));
+                Assert.Equal(Path.GetFullPath(file.Path), args.FullPath);
+            }
+        }
+
     }
 }

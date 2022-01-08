@@ -18,7 +18,7 @@ namespace System.IO
             : base(changeType, directory, name)
         {
             _oldName = oldName;
-            _oldFullPath = Combine(directory, oldName);
+            _oldFullPath = Combine(Path.GetFullPath(directory), oldName);
         }
 
         /// <devdoc>

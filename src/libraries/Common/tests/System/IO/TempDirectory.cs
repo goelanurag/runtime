@@ -16,6 +16,7 @@ namespace System.IO
         /// <summary>Gets the created directory's path.</summary>
         public string Path { get; private set; }
 
+        public string RelativePath { get; private set; }
         /// <summary>
         /// Construct a random temp directory in the temp folder.
         /// </summary>
@@ -27,7 +28,8 @@ namespace System.IO
         public TempDirectory(string path)
         {
             Path = path;
-            Directory.CreateDirectory(path);
+            RelativePath = IO.Path.GetRelativePath(Directory.GetCurrentDirectory(), path);
+            var directoryInfo = Directory.CreateDirectory(path);
         }
 
         ~TempDirectory() { DeleteDirectory(); }
@@ -40,6 +42,7 @@ namespace System.IO
 
         public string GenerateRandomFilePath() => IO.Path.Combine(Path, IO.Path.GetRandomFileName());
 
+        
         protected virtual void DeleteDirectory()
         {
             try { Directory.Delete(Path, recursive: true); }

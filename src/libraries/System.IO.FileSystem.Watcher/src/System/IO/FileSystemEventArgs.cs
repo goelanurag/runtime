@@ -19,7 +19,7 @@ namespace System.IO
         {
             _changeType = changeType;
             _name = name;
-            _fullPath = Combine(directory, name);
+            _fullPath = Combine(Path.GetFullPath(directory), name);
         }
 
         /// <summary>Combines a directory path and a relative file name into a single path.</summary>
@@ -32,16 +32,17 @@ namespace System.IO
         /// </remarks>
         internal static string Combine(string directoryPath, string? name)
         {
-            bool hasSeparator = false;
-            if (directoryPath.Length > 0)
-            {
-                char c = directoryPath[directoryPath.Length - 1];
-                hasSeparator = c == Path.DirectorySeparatorChar || c == Path.AltDirectorySeparatorChar;
-            }
+            return Path.Combine(directoryPath, name == null ? "" : name);
+        //    bool hasSeparator = false;
+        //    if (directoryPath.Length > 0)
+        //    {
+        //        char c = directoryPath[directoryPath.Length - 1];
+        //        hasSeparator = c == Path.DirectorySeparatorChar || c == Path.AltDirectorySeparatorChar;
+        //    }
 
-            return hasSeparator ?
-                directoryPath + name :
-                directoryPath + Path.DirectorySeparatorChar + name;
+        //    return hasSeparator ?
+        //        directoryPath + name :
+        //        directoryPath + Path.DirectorySeparatorChar + name;
         }
 
         /// <devdoc>
